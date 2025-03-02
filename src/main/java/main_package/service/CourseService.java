@@ -33,4 +33,17 @@ public class CourseService {
     }
     return courses;
   }
+
+  public void updateCourse(Long userId, Long courseId, CourseCreateRequest request) {
+    log.info("Update course with id {} for user with id {}", courseId, userId);
+    CourseData courseData = new CourseData(request.name());
+    courseRepository.updateCourse(userId, courseId, courseData);
+    log.info("Course with id {} for user with id {} was updated", courseId, userId);
+  }
+
+  public void deleteCourse(Long userId, Long courseId) {
+    log.info("Delete course with id {} for user with id {}", courseId, userId);
+    courseRepository.deleteCourse(userId, courseId);
+    log.info("Course with id {} for user with id {} was deleted", courseId, userId);
+  }
 }

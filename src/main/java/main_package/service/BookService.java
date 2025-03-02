@@ -37,4 +37,23 @@ public class BookService {
     }
     return books;
   }
+
+  public void updateBook(Long userId, Long bookId, BookCreateRequest request) {
+    log.info("Update book with id {} for user with id {}", bookId, userId);
+    BookData bookData = new BookData(request.title(), request.author());
+    bookRepository.updateBook(userId, bookId, bookData);
+    log.info("Book with id {} for user with id {} was updated", bookId, userId);
+  }
+
+  public void createBookList(Long userId) {
+    log.info("Create new booklist to user with id {}", userId);
+    bookRepository.createBookList(userId);
+    log.info("Booklist was successfully created");
+  }
+
+  public void deleteBook(Long userId, Long bookId) {
+    log.info("Delete book with id {} for user with id {}", bookId, userId);
+    bookRepository.deleteBook(userId, bookId);
+    log.info("Book with id {} for user with id {} was deleted", bookId, userId);
+  }
 }

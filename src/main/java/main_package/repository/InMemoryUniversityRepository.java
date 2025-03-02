@@ -1,5 +1,6 @@
 package main_package.repository;
 
+import main_package.exception.UniversityNotFoundException;
 import main_package.model.University;
 import main_package.model.UniversityData;
 import org.springframework.stereotype.Repository;
@@ -11,7 +12,11 @@ public class InMemoryUniversityRepository implements UniversityRepository {
 
   @Override
   public UniversityData getUniversityById(Long id) {
-    return university;
+    if (id == 1) {
+      return university;
+    } else {
+      throw new UniversityNotFoundException();
+    }
   }
 
   @Override

@@ -1,6 +1,7 @@
 package main_package.repository;
 
 import java.util.ArrayList;
+import main_package.exception.BooksNotFoundException;
 import main_package.model.Book;
 import main_package.model.BookData;
 import org.springframework.stereotype.Repository;
@@ -25,5 +26,36 @@ public class InMemoryBookRepository implements BookRepository {
   public Long createBook(BookData bookData) {
     Book book = new Book(78L, bookData);
     return 78L;
+  }
+
+  @Override
+  public void updateBook(Long userId, Long bookId, BookData bookData) {
+    if (bookId == 1L) {
+      book1 = bookData;
+    } else if (bookId == 2) {
+      book2 = bookData;
+    } else if (bookId == 3) {
+      book3 = bookData;
+    } else {
+      throw new BooksNotFoundException();
+    }
+  }
+
+  @Override
+  public void createBookList(Long userId) {
+    ArrayList<BookData> books = new ArrayList<>();
+  }
+
+  @Override
+  public void deleteBook(Long userId, Long bookId) {
+    if (bookId == 1L) {
+      book1 = null;
+    } else if (bookId == 2) {
+      book2 = null;
+    } else if (bookId == 3) {
+      book3 = null;
+    } else {
+      throw new BooksNotFoundException();
+    }
   }
 }

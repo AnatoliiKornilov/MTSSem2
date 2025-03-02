@@ -7,16 +7,12 @@ import main_package.response.BookGetResponse;
 import main_package.service.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/book")
-public class BookController {
+@RequestMapping("/api/user")
+public class BookController implements BookControllerInterface {
 
   private final BookService bookService;
 
@@ -24,17 +20,34 @@ public class BookController {
     this.bookService = bookService;
   }
 
-  @GetMapping("/user/{userId}")
-  public ResponseEntity<List<BookGetResponse>> getAllBooksById(@PathVariable Long userId) {
+  @Override
+  public ResponseEntity<List<BookGetResponse>> getAllBooksById(Long userId) {
     return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBooksById(userId).stream()
         .map(bookData -> new BookGetResponse(bookData.title(), bookData.author()))
         .collect(Collectors.toList()));
   }
 
-  @PutMapping("/user/{userId}")
-  public ResponseEntity<Void> addBookForUserById(
-      @PathVariable Long userId, @RequestBody BookCreateRequest book) {
+  @Override
+  public ResponseEntity<Void> addBookForUserById(Long userId, BookCreateRequest book) {
     bookService.createBook(book);
     return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
+  @Override
+  public ResponseEntity<Void> updateBook(Long userId, Long bookId, BookCreateRequest request) {
+    bookService.updateBook(userId, bookId, request);
+    return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
+  @Override
+  public ResponseEntity<Void> createBookList(Long userId) {
+    bookService.createBookList(userId);
+    return ResponseEntity.status(HttpStatus.OK).build();
+  }
+
+  @Override
+  public ResponseEntity<Void> deleteBook(Long userId, Long bookId) {
+    bookService.deleteBook(userId, bookId);
+    return ResponseEntity.status(HttpStatus.OK).build();
   }
 }

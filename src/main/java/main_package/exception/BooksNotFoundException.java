@@ -1,7 +1,8 @@
 package main_package.exception;
 
 public class BooksNotFoundException extends RuntimeException {
-  public BooksNotFoundException(String message) {
-    super(message);
+
+  public BooksNotFoundException() {
+    super("Список книг не найден");
   }
 }
