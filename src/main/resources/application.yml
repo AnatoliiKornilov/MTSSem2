@@ -1,8 +1,0 @@
-spring:
-  application:
-    name: "application"
-springdoc:
-  spi-docs:
-    path: "/api-docs"
-  swagger-ui:
-    path: "/swagger-ui.html"
