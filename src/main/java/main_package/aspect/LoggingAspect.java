@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoggingAspect {
 
+  public int value = 0;
+
   // Метод, который будет вызван перед выполнением любого метода в сервисе
   @Before("execution(* main_package.controller.*.*(..))")
   public void logBefore(JoinPoint joinPoint) {
@@ -20,6 +22,7 @@ public class LoggingAspect {
   // Самый мощный совет, контролирует выполнение метода
   @Around("execution(* main_package.controller.*.*(..))")
   public void measureExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
+    ++value;
     long startTime = System.currentTimeMillis();
     joinPoint.proceed(); // Вызов целевого метода
     long duration = System.currentTimeMillis() - startTime;

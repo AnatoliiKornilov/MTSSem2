@@ -2,12 +2,13 @@ package main_package.service;
 
 import java.util.ArrayList;
 import lombok.extern.slf4j.Slf4j;
+import main_package.exception.BooksNotFoundException;
 import main_package.model.BookData;
-import main_package.model.UserData;
 import main_package.repository.BookRepository;
-import main_package.repository.UserRepository;
 import main_package.request.BookCreateRequest;
-import main_package.request.UserCreateRequest;
+import org.springframework.retry.annotation.Retryable;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Service;
 
 
@@ -38,6 +39,7 @@ public class BookService {
     return books;
   }
 
+  @Async("taskExecutor")
   public void updateBook(Long userId, Long bookId, BookCreateRequest request) {
     log.info("Update book with id {} for user with id {}", bookId, userId);
     BookData bookData = new BookData(request.title(), request.author());
@@ -51,6 +53,8 @@ public class BookService {
     log.info("Booklist was successfully created");
   }
 
+  // Удаление - долгий и сложный процесс, надо гарантировать его завершение
+  @Retryable(value = BooksNotFoundException.class, maxAttempts = 5, backoff = @Backoff(delay = 10_000))
   public void deleteBook(Long userId, Long bookId) {
     log.info("Delete book with id {} for user with id {}", bookId, userId);
     bookRepository.deleteBook(userId, bookId);

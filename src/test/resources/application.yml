@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: test
+
+server:
+  port: 0
+  tomcat:
+    threads:
+      min-spare: 10
+      max: 50

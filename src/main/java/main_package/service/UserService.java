@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import main_package.model.UserData;
 import main_package.repository.UserRepository;
 import main_package.request.UserCreateRequest;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -23,6 +24,7 @@ public class UserService {
     return userId;
   }
 
+  @Cacheable(value="user", key="#user")
   public UserData getUserById(Long userId) {
     log.info("Getting user by id: {}", userId);
     UserData user = userRepository.getUserDataById(userId);

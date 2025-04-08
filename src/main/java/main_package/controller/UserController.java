@@ -1,5 +1,6 @@
 package main_package.controller;
 
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import main_package.model.UserData;
 import main_package.request.UserCreateRequest;
 import main_package.response.UserGetResponse;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/user")
 public class UserController implements UserControllerInterface {
   private final UserService userService;
+  private final CircuitBreaker circuitBreaker = CircuitBreaker.ofDefaults(
+      "BookControllerCircuitBreaker");
 
   public UserController(UserService userService) {
     this.userService = userService;
@@ -20,12 +23,16 @@ public class UserController implements UserControllerInterface {
 
   @Override
   public ResponseEntity<Long> createUser(UserCreateRequest request) {
+    return circuitBreaker.executeSupplier(() -> {
     return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(request));
+    });
   }
 
   @Override
   public ResponseEntity<UserGetResponse> getUser(Long userId) {
+    return circuitBreaker.executeSupplier(() -> {
     UserData user = userService.getUserById(userId);
     return ResponseEntity.status(HttpStatus.OK).body(new UserGetResponse(user.name(), user.surname()));
+    });
   }
 }

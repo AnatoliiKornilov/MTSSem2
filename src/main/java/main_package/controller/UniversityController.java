@@ -1,5 +1,7 @@
 package main_package.controller;
 
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.RateLimiter;
 import main_package.model.UniversityData;
 import main_package.request.UniversityCreateRequest;
 import main_package.response.UniversityGetResponse;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UniversityController implements UniversityControllerInterface {
 
   private final UniversityService universityService;
+  private final CircuitBreaker circuitBreaker = CircuitBreaker.ofDefaults("CourseControllerCircuitBreaker");
+  private final RateLimiter rateLimiter = RateLimiter.ofDefaults("CourseControllerRateLimiter");
 
   public UniversityController(UniversityService universityService) {
     this.universityService = universityService;
@@ -21,13 +25,17 @@ public class UniversityController implements UniversityControllerInterface {
 
   @Override
   public ResponseEntity<UniversityGetResponse> getUniversityById(Long userId) {
+    return circuitBreaker.executeSupplier(() -> rateLimiter.executeSupplier(() -> {
     UniversityData universityData = universityService.getUniversityById(userId);
     return ResponseEntity.status(HttpStatus.OK).body(new UniversityGetResponse(universityData.name(), universityData.location()));
+    }));
   }
 
   @Override
   public ResponseEntity<Void> addUniversityForUserById(Long userId, UniversityCreateRequest university) {
-    universityService.createUniversity(university);
-    return ResponseEntity.status(HttpStatus.CREATED).build();
+    return circuitBreaker.executeSupplier(() -> rateLimiter.executeSupplier(() -> {
+      universityService.createUniversity(university);
+      return ResponseEntity.status(HttpStatus.CREATED).build();
+    }));
   }
 }
