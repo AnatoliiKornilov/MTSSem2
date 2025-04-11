@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController implements UserControllerInterface {
   private final UserService userService;
   private final CircuitBreaker circuitBreaker = CircuitBreaker.ofDefaults(
-      "BookControllerCircuitBreaker");
+      "UserControllerCircuitBreaker");
 
   public UserController(UserService userService) {
     this.userService = userService;

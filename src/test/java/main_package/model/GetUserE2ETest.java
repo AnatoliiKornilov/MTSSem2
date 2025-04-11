@@ -36,10 +36,14 @@ class GetUserE2ETest {
 
   @ClassRule
   public static PostgreSQLContainer<?> postgresContainer = new PostgreSQLContainer<>("postgres:13")
+      .withInitScript("init.sql")
       .withDatabaseName("testdb")
       .withUsername("testuser")
-      .withPassword("testpass")
-      .withInitScript("init.sql");
+      .withPassword("testpass");
+
+  static {
+    postgresContainer.start();
+  }
 
   @Test
   public void testGetUser() {
@@ -48,7 +52,6 @@ class GetUserE2ETest {
     String url = "http://localhost:" + port + "/api/user/1";
     ResponseEntity<UserGetResponse> response = restTemplate.getForEntity(url,
         UserGetResponse.class);
-
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertEquals(correctUserResponse, response.getBody());
   }

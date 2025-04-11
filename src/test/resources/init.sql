@@ -1,22 +1,22 @@
 create table users (
-  id serial primary key,
-  name text not null,
-  surname text not null
+  id bigint primary key,
+  name varchar(255) not null,
+  surname varchar(255) not null
 );
 
 create table books (
-  id serial primary key,
-  title text not null,
-  author text not null
+  id bigint primary key,
+  title varchar(255) not null,
+  author varchar(255) not null
 );
 
 create table courses (
-  id serial primary key,
-  name text not null
-)
+  id bigint primary key,
+  name varchar(255) not null
+);
 
 create table universities (
-  id serial primary key,
-  name text not null,
-  location text
-)
+  id bigint primary key,
+  name varchar(255) not null,
+  location varchar(255)
+);
