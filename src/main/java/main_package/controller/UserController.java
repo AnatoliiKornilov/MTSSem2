@@ -1,6 +1,7 @@
 package main_package.controller;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import lombok.extern.slf4j.Slf4j;
 import main_package.model.UserData;
 import main_package.request.UserCreateRequest;
 import main_package.response.UserGetResponse;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/user")
+@Slf4j
 public class UserController implements UserControllerInterface {
   private final UserService userService;
   private final CircuitBreaker circuitBreaker = CircuitBreaker.ofDefaults(
@@ -31,8 +33,8 @@ public class UserController implements UserControllerInterface {
   @Override
   public ResponseEntity<UserGetResponse> getUser(Long userId) {
     return circuitBreaker.executeSupplier(() -> {
-    UserData user = userService.getUserById(userId);
-    return ResponseEntity.status(HttpStatus.OK).body(new UserGetResponse(user.name(), user.surname()));
+      UserData user = userService.getUserById(userId);
+      return ResponseEntity.ok(new UserGetResponse(user.name(), user.surname()));
     });
   }
 }
