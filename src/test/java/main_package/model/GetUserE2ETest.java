@@ -29,8 +29,7 @@ class GetUserE2ETest {
   @Test
   public void testGetUser() {
     String url = "http://localhost:" + port + "/api/user/1";
-    ResponseEntity<UserGetResponse> response = restTemplate.getForEntity(url,
-        UserGetResponse.class);
+    ResponseEntity<UserGetResponse> response = restTemplate.getForEntity(url, UserGetResponse.class, String.class);
 
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertEquals(correctUserResponse, response.getBody());
