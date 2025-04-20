@@ -1,12 +1,10 @@
 package main_package.repository;
 
 import java.util.ArrayList;
-import main_package.model.BookData;
+import main_package.model.Book;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface BookRepository {
-  ArrayList<BookData> getAllBooksById (Long id);
-  Long createBook(BookData book);
-  void updateBook(Long userId, Long bookId, BookData bookData);
-  void createBookList(Long userId);
-  void deleteBook(Long userId, Long bookId);
+public interface BookRepository extends JpaRepository<Book, Long> {
+  ArrayList<Book> getAllBooksById (Long id);
 }

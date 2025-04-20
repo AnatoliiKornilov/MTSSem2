@@ -1,11 +1,16 @@
 package main_package.service;
 
+import java.util.Collections;
 import lombok.extern.slf4j.Slf4j;
+import main_package.exception.UserNotFoundException;
+import main_package.model.User;
 import main_package.model.UserData;
 import main_package.repository.UserRepository;
 import main_package.request.UserCreateRequest;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -17,18 +22,20 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
+  @Transactional
   public Long createUser(UserCreateRequest request) {
     log.info("Creating new user with username: {} {}", request.name(), request.surname());
-    Long userId = userRepository.createUser(new UserData(request.name(), request.surname()));
-    log.info("Created new user with id: {}", userId);
-    return userId;
+    User user = userRepository.save(new User(null, new UserData(request.name(), request.surname())));
+    log.info("Created new user");
+    return user.getId();
   }
 
   @Cacheable(value="user", key="#user")
-  public UserData getUserById(Long userId) {
+  @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+  public User getUserById(Long userId) {
     log.info("Getting user by id: {}", userId);
-    UserData user = userRepository.getUserDataById(userId);
-    log.info("Found user: {} {}", user.name(), user.surname());
+    User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    log.info("Found user: {} {}", user.getFullName().name(), user.getFullName().surname());
     return user;
   }
 }

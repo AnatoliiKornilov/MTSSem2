@@ -26,7 +26,7 @@ public class CourseController implements CourseControllerInterface {
   public ResponseEntity<List<CourseGetResponse>> getAllCoursesById(Long userId) {
     return rateLimiter.executeSupplier(() -> {
     return ResponseEntity.status(HttpStatus.OK).body(courseService.getAllCoursesById(userId).stream()
-        .map(courseData -> new CourseGetResponse(courseData.name()))
+        .map(courseData -> new CourseGetResponse(courseData.getCourseData().name()))
         .collect(Collectors.toList()));
     });
   }

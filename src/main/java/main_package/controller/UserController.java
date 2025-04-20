@@ -2,6 +2,7 @@ package main_package.controller;
 
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
+import main_package.model.User;
 import main_package.model.UserData;
 import main_package.request.UserCreateRequest;
 import main_package.response.UserGetResponse;
@@ -33,8 +34,8 @@ public class UserController implements UserControllerInterface {
   @Override
   public ResponseEntity<UserGetResponse> getUser(Long userId) {
     return circuitBreaker.executeSupplier(() -> {
-      UserData user = userService.getUserById(userId);
-      return ResponseEntity.ok(new UserGetResponse(user.name(), user.surname()));
+      User user = userService.getUserById(userId);
+      return ResponseEntity.ok(new UserGetResponse(user.getFullName().name(), user.getFullName().surname()));
     });
   }
 }

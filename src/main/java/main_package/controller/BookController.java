@@ -21,9 +21,10 @@ public class BookController implements BookControllerInterface {
   }
 
   @Override
-  public ResponseEntity<List<BookGetResponse>> getAllBooksById(Long userId) {
-    return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBooksById(userId).stream()
-        .map(bookData -> new BookGetResponse(bookData.title(), bookData.author()))
+  public ResponseEntity<List<BookGetResponse>> getAllBooks(Long userId) {
+    return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBooks(userId).stream()
+        .map(bookData -> new BookGetResponse(bookData.getBookData().title(), bookData.getBookData().author()))
+
         .collect(Collectors.toList()));
   }
 
@@ -36,12 +37,6 @@ public class BookController implements BookControllerInterface {
   @Override
   public ResponseEntity<Void> updateBook(Long userId, Long bookId, BookCreateRequest request) {
     bookService.updateBook(userId, bookId, request);
-    return ResponseEntity.status(HttpStatus.OK).build();
-  }
-
-  @Override
-  public ResponseEntity<Void> createBookList(Long userId) {
-    bookService.createBookList(userId);
     return ResponseEntity.status(HttpStatus.OK).build();
   }
 

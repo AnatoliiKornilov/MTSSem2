@@ -27,7 +27,7 @@ public interface BookControllerInterface {
   @ApiResponse(responseCode = "404", description = "Книга не найдена",
       content = @Content(schema = @Schema(implementation = BooksNotFoundException.class)))
   @GetMapping("{userId}/book")
-  ResponseEntity<List<BookGetResponse>> getAllBooksById(@Parameter(description = "ID пользователя")
+  ResponseEntity<List<BookGetResponse>> getAllBooks(@Parameter(description = "ID пользователя")
   @PathVariable Long userId);
 
   @Operation(summary = "Добавить книгу пользователю по его id")
@@ -43,11 +43,6 @@ public interface BookControllerInterface {
   @PatchMapping("/{userId}/book/{bookId}")
   ResponseEntity<Void> updateBook(@Parameter(description = "ID пользователя") @PathVariable Long userId,
       @Parameter(description = "ID книги") @PathVariable Long bookId, @RequestBody BookCreateRequest book);
-
-  @Operation(summary = "Создать пустой список книг для пользователя по id")
-  @ApiResponse(responseCode = "200", description = "Список успешно создан")
-  @PostMapping("/{userId}")
-  ResponseEntity<Void> createBookList(@Parameter(description = "ID пользователя") @PathVariable Long userId);
 
   @Operation(summary = "Удалить книгу по id пользователя по id")
   @ApiResponse(responseCode = "200", description = "Книга успешно удалена")
