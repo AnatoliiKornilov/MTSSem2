@@ -38,3 +38,5 @@ CREATE TABLE course_user (
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (course_id) REFERENCES courses(course_id)
 );
+
+INSERT INTO universities (university_id, university_name, location) VALUES (1, 'МФТИ', 'Долгопа');

@@ -2,7 +2,7 @@ package main_package.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import main_package.exception.UserNotFoundException;
-import main_package.model.UniversityData;
+import main_package.model.University;
 import main_package.request.UniversityCreateRequest;
 import main_package.service.UniversityService;
 import org.junit.jupiter.api.Test;
@@ -41,15 +41,15 @@ class UniversityControllerTest {
 
   @Test
   public void testGetUniversitySuccess() throws Exception {
-    UniversityData universityData = new UniversityData("МФТИ", "Долгопа");
+    University universityData = new University(null, "МФТИ", "Долгопа");
     when(universityService.getUniversityById(1L))
         .thenReturn(universityData);
 
     mockMvc.perform(get(basePath + "/" + 1))
         .andExpect(status().isOk())
         .andExpect(content().contentType(jsonContentType))
-        .andExpect(jsonPath("$.name").value(universityData.name()))
-        .andExpect(jsonPath("$.location").value(universityData.location()));
+        .andExpect(jsonPath("$.name").value(universityData.getUniversityName()))
+        .andExpect(jsonPath("$.location").value(universityData.getLocation()));
     verify(universityService).getUniversityById(1L);
   }
 

@@ -1,29 +1,49 @@
 package main_package.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import java.util.HashSet;
+import java.util.Set;
+import lombok.Getter;
+import lombok.Setter;
 
 @Schema(name = "Book", description = "Сущность книги с id")
 @Entity
-@Data
+@Getter
+@Setter
 @Table(name = "books")
 public class Book {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private Long bookId;
 
+  @Column(name="author")
   @NotNull
-  private BookData bookData;
+  private String author;
 
-  public Book(Long id, BookData bookData) {
-    this.id = id;
-    this.bookData = bookData;
+  @Column(name="title")
+  @NotNull
+  private String title;
+
+  @Column(name="users")
+  @NotNull
+  @ManyToMany(mappedBy="books")
+  private Set<User> users;
+
+  public Book() {}
+
+  public Book(Long bookId, String author, String title) {
+    this.bookId = bookId;
+    this.author = author;
+    this.title = title;
+    this.users = new HashSet<>();
   }
 }

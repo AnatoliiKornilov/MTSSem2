@@ -2,10 +2,10 @@ package main_package.service;
 
 import java.util.Collections;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import main_package.exception.BooksNotFoundException;
 import main_package.model.Book;
-import main_package.model.BookData;
 import main_package.repository.BookRepository;
 import main_package.request.BookCreateRequest;
 import org.springframework.retry.annotation.Retryable;
@@ -18,20 +18,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
   private final BookRepository bookRepository;
 
-  public BookService(BookRepository bookRepository) {
-    this.bookRepository = bookRepository;
-  }
-
   @Transactional
   public Long createBook(BookCreateRequest request) {
     log.info("Adding new book {} by {}", request.title(), request.author());
-    Book book = bookRepository.save(new Book(null, new BookData(request.title(), request.author())));
+    Book book = bookRepository.save(new Book(null, request.title(), request.author()));
     log.info("Created new book");
-    return book.getId();
+    return book.getBookId();
   }
 
   @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -40,7 +37,7 @@ public class BookService {
     List<Book> books = bookRepository.findAllById(Collections.singleton(userId));
     log.info("Found books:");
     for (int i = 0; i < books.size(); i++) {
-      log.info("{} - {}; ", books.get(i).getBookData().title(), books.get(i).getBookData().author());
+      log.info("{} - {}; ", books.get(i).getTitle(), books.get(i).getAuthor());
     }
     return books;
   }
@@ -49,7 +46,7 @@ public class BookService {
   @Transactional
   public void updateBook(Long userId, Long bookId, BookCreateRequest request) {
     log.info("Update book with id {} for user with id {}", bookId, userId);
-    Book updatedBook = bookRepository.save(new Book(bookId, new BookData(request.title(), request.author())));
+    Book updatedBook = bookRepository.save(new Book(bookId, request.title(), request.author()));
     log.info("Book updated successfully");
   }
 

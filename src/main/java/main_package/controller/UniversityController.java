@@ -3,7 +3,6 @@ package main_package.controller;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import main_package.model.University;
-import main_package.model.UniversityData;
 import main_package.request.UniversityCreateRequest;
 import main_package.response.UniversityGetResponse;
 import main_package.service.UniversityService;
@@ -28,7 +27,7 @@ public class UniversityController implements UniversityControllerInterface {
   public ResponseEntity<UniversityGetResponse> getUniversityById(Long userId) {
     return circuitBreaker.executeSupplier(() -> rateLimiter.executeSupplier(() -> {
     University universityData = universityService.getUniversityById(userId);
-    return ResponseEntity.status(HttpStatus.OK).body(new UniversityGetResponse(universityData.getUniversityData().name(), universityData.getUniversityData().location()));
+    return ResponseEntity.status(HttpStatus.OK).body(new UniversityGetResponse(universityData.getUniversityName(), universityData.getLocation()));
     }));
   }
 

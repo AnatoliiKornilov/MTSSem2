@@ -5,7 +5,6 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import main_package.exception.CoursesNotFoundException;
 import main_package.model.Course;
-import main_package.model.CourseData;
 import main_package.repository.CourseRepository;
 import main_package.request.CourseCreateRequest;
 import org.springframework.stereotype.Service;
@@ -25,9 +24,9 @@ public class CourseService {
   @Transactional
   public Long createCourse(CourseCreateRequest request) {
     log.info("Adding new course {}", request.name());
-    Course course = courseRepository.save(new Course(null, new CourseData(request.name())));
+    Course course = courseRepository.save(new Course(null, request.name()));
     log.info("Created new course");
-    return course.getId();
+    return course.getCourseId();
   }
 
   @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
@@ -36,7 +35,7 @@ public class CourseService {
     List<Course> courses = courseRepository.findAllById(Collections.singleton(userId));
     log.info("Found courses:");
     for (int i = 0; i < courses.size(); i++) {
-      log.info("{}; ", courses.get(i).getCourseData().name());
+      log.info("{}; ", courses.get(i).getCourseName());
     }
     return courses;
   }
@@ -44,7 +43,7 @@ public class CourseService {
   @Transactional
   public void updateCourse(Long userId, Long courseId, CourseCreateRequest request) {
     log.info("Update course with id {} for user with id {}", courseId, userId);
-    Course updatedCourse = courseRepository.save(new Course(courseId, new CourseData(request.name())));
+    Course updatedCourse = courseRepository.save(new Course(courseId, request.name()));
     log.info("Course with id {} for user with id {} was updated", courseId, userId);
   }
 

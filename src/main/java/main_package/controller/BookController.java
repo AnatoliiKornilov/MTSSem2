@@ -23,8 +23,7 @@ public class BookController implements BookControllerInterface {
   @Override
   public ResponseEntity<List<BookGetResponse>> getAllBooks(Long userId) {
     return ResponseEntity.status(HttpStatus.OK).body(bookService.getAllBooks(userId).stream()
-        .map(bookData -> new BookGetResponse(bookData.getBookData().title(), bookData.getBookData().author()))
-
+        .map(bookData -> new BookGetResponse(bookData.getTitle(), bookData.getAuthor()))
         .collect(Collectors.toList()));
   }
 
