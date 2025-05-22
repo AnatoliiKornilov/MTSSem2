@@ -1,5 +1,6 @@
 package main_package.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import main_package.exception.UserNotFoundException;
 import main_package.model.User;
@@ -12,18 +13,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
   private final UserRepository userRepository;
 
-  public UserService(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
-
   @Transactional
   public Long createUser(UserCreateRequest request) {
     log.info("Creating new user with username: {} {}", request.name(), request.surname());
-    User user = userRepository.save(new User(null, request.name(), request.surname()));
+    User user = userRepository.save(new User(request.name(), request.surname()));
     log.info("Created new user");
     return user.getUserId();
   }

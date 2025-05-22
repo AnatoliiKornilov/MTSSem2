@@ -46,7 +46,7 @@ public class User {
       joinColumns = @JoinColumn(name = "userId"),
       inverseJoinColumns = @JoinColumn(name = "bookId")
   )
-  private Set<Book> books;
+  private Set<Book> books = new HashSet<>();
 
   @Column(name="courses")
   @NotNull
@@ -56,7 +56,7 @@ public class User {
       joinColumns = @JoinColumn(name = "userId"),
       inverseJoinColumns = @JoinColumn(name = "courseId")
   )
-  private Set<Course> courses;
+  private Set<Course> courses = new HashSet<>();
 
   @NotNull
   @ManyToOne
@@ -65,12 +65,14 @@ public class User {
 
   public User() {}
 
+  public User(String userName, String userSurname) {
+    this.userName = userName;
+    this.userSurname = userSurname;
+  }
+
   public User(Long userId, String userName, String userSurname) {
     this.userId = userId;
     this.userName = userName;
     this.userSurname = userSurname;
-    this.books = new HashSet<>();
-    this.courses = new HashSet<>();
-    this.university = null;
   }
 }

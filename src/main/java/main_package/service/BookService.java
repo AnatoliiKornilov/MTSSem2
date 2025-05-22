@@ -26,7 +26,7 @@ public class BookService {
   @Transactional
   public Long createBook(BookCreateRequest request) {
     log.info("Adding new book {} by {}", request.title(), request.author());
-    Book book = bookRepository.save(new Book(null, request.title(), request.author()));
+    Book book = bookRepository.save(new Book(request.title(), request.author()));
     log.info("Created new book");
     return book.getBookId();
   }

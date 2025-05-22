@@ -1,4 +1,4 @@
-package main_package.aspect;
+/*package main_package.aspect;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -30,4 +30,4 @@ public class LoggingAspect {
         + " выполнен за " + duration + " мс");
     return result;
   }
-}
+}*/

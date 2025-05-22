@@ -24,7 +24,7 @@ public class CourseService {
   @Transactional
   public Long createCourse(CourseCreateRequest request) {
     log.info("Adding new course {}", request.name());
-    Course course = courseRepository.save(new Course(null, request.name()));
+    Course course = courseRepository.save(new Course(request.name()));
     log.info("Created new course");
     return course.getCourseId();
   }

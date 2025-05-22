@@ -36,14 +36,18 @@ public class Book {
   @Column(name="users")
   @NotNull
   @ManyToMany(mappedBy="books")
-  private Set<User> users;
+  private Set<User> users = new HashSet<>();
 
   public Book() {}
+
+  public Book(String author, String title) {
+    this.author = author;
+    this.title = title;
+  }
 
   public Book(Long bookId, String author, String title) {
     this.bookId = bookId;
     this.author = author;
     this.title = title;
-    this.users = new HashSet<>();
   }
 }

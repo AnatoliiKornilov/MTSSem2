@@ -1,28 +1,27 @@
 package main_package.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import main_package.exception.UniversityNotFoundException;
 import main_package.model.University;
 import main_package.repository.UniversityRepository;
 import main_package.request.UniversityCreateRequest;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UniversityService {
 
   private final UniversityRepository universityRepository;
 
-  public UniversityService(UniversityRepository universityRepository) {
-    this.universityRepository = universityRepository;
-  }
-
   @Transactional
   public Long createUniversity(UniversityCreateRequest request) {
     log.info("Adding new university {} {}", request.name(), request.location());
-    University university = universityRepository.save(new University(null, request.name(), request.location()));
+    University university = universityRepository.save(new University(request.name(), request.location()));
     log.info("Created new university");
     return university.getUniversityId();
   }

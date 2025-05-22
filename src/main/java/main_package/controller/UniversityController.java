@@ -1,5 +1,6 @@
 package main_package.controller;
 
+import ch.qos.logback.core.net.SyslogOutputStream;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.RateLimiter;
 import main_package.model.University;
@@ -27,6 +28,7 @@ public class UniversityController implements UniversityControllerInterface {
   public ResponseEntity<UniversityGetResponse> getUniversityById(Long userId) {
     return circuitBreaker.executeSupplier(() -> rateLimiter.executeSupplier(() -> {
     University universityData = universityService.getUniversityById(userId);
+    System.out.println(universityData.getUniversityName());
     return ResponseEntity.status(HttpStatus.OK).body(new UniversityGetResponse(universityData.getUniversityName(), universityData.getLocation()));
     }));
   }

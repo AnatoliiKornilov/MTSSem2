@@ -36,14 +36,18 @@ public class University {
   @Column(name="users")
   @NotNull
   @OneToMany(mappedBy="university")
-  private Set<User> users;
+  private Set<User> users = new HashSet<>();
 
   public University() {}
+
+  public University(String universityName, String location) {
+    this.universityName = universityName;
+    this.location = location;
+  }
 
   public University(Long universityId, String universityName, String location) {
     this.universityId = universityId;
     this.universityName = universityName;
     this.location = location;
-    this.users = new HashSet<>();
   }
 }

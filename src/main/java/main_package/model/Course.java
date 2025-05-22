@@ -32,13 +32,16 @@ public class Course {
   @Column(name="users")
   @NotNull
   @ManyToMany(mappedBy="courses")
-  private Set<User> users;
+  private Set<User> users = new HashSet<>();
 
   public Course() {}
+
+  public Course(String courseName) {
+    this.courseName = courseName;
+  }
 
   public Course(Long courseId, String courseName) {
     this.courseId = courseId;
     this.courseName = courseName;
-    this.users = new HashSet<>();
   }
 }
