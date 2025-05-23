@@ -26,7 +26,10 @@ public class UserController implements UserControllerInterface {
   @Override
   public ResponseEntity<Long> createUser(UserCreateRequest request) {
     return circuitBreaker.executeSupplier(() -> {
-    return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(request));
+      Long userId = userService.createUser(request);
+      System.out.println(userId);
+      log.info(userId + "!!!");
+      return ResponseEntity.status(HttpStatus.CREATED).body(userId);
     });
   }
 
