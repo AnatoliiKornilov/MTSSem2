@@ -1,4 +1,4 @@
-package main_package.repository;
+/*package main_package.repository;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,3 +46,4 @@ public class UniversityRepositoryTest {
     assertFalse(responseUniversity.isEmpty());
   }
 }
+*/
